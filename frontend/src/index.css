@@ -1,0 +1,82 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+    body {
+        background-color: #0a0f0d;
+        color: #e2f5e8;
+        font-family: 'DM Sans', sans-serif;
+    }
+
+    ::-webkit-scrollbar {
+        width: 6px;
+    }
+
+    ::-webkit-scrollbar-track {
+        background: #0f1a14;
+    }
+
+    ::-webkit-scrollbar-thumb {
+        background: #263326;
+        border-radius: 3px;
+    }
+}
+
+@layer components {
+    .card {
+        @apply bg-surface-800 border border-surface-600 rounded-xl p-5;
+    }
+
+    .btn-primary {
+        @apply bg-brand-500 hover:bg-brand-600 text-white font-medium px-4 py-2 rounded-lg transition-all duration-150 text-sm disabled:opacity-40 disabled:cursor-not-allowed;
+    }
+
+    .btn-ghost {
+        @apply bg-surface-700 hover:bg-surface-600 text-brand-400 font-medium px-4 py-2 rounded-lg transition-all duration-150 text-sm border border-surface-600;
+    }
+
+    .badge-running {
+        @apply inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-medium bg-brand-900 text-brand-400 border border-brand-600/30;
+    }
+
+    .badge-stopped {
+        @apply inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-medium bg-surface-700 text-gray-400 border border-surface-600;
+    }
+
+    .badge-error {
+        @apply inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-950 text-red-400 border border-red-800/30;
+    }
+
+    .badge-pulling {
+        @apply inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-950 text-yellow-400 border border-yellow-800/30 animate-pulse;
+    }
+
+    .stat-card {
+        @apply card flex flex-col gap-1;
+    }
+
+    .input {
+        @apply bg-surface-700 border border-surface-600 rounded-lg px-3 py-2 text-sm text-gray-200 placeholder-gray-600 focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500 transition-colors;
+    }
+
+    .select {
+        @apply input appearance-none cursor-pointer;
+    }
+}
+
+.pulse-dot {
+    animation: pulse-dot 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes pulse-dot {
+
+    0%,
+    100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.3;
+    }
+}
