@@ -3,11 +3,14 @@ import Sidebar from './components/Sidebar'
 import Dashboard from './pages/Dashboard'
 import Models from './pages/Models'
 import Playground from './pages/Playground'
+import Metrics from './pages/Metrics'
+import Benchmark from './pages/Benchmark'
+import RoutesPage from './pages/Routes'
 
 const Placeholder = ({ name }) => (
     <div className="p-6">
         <h1 className="text-xl font-semibold text-white">{name}</h1>
-        <p className="text-gray-500 mt-2 text-sm">Coming soon — wire up your page here.</p>
+        <p className="text-gray-500 mt-2 text-sm">Coming soon.</p>
     </div>
 )
 
@@ -20,10 +23,10 @@ export default function App() {
                     <Routes>
                         <Route path="/" element={<Dashboard />} />
                         <Route path="/models" element={<Models />} />
-                        <Route path="/routes" element={<Placeholder name="Routes" />} />
-                        <Route path="/metrics" element={<Placeholder name="Metrics" />} />
+                        <Route path="/routes" element={<RoutesPage />} />
+                        <Route path="/metrics" element={<Metrics />} />
                         <Route path="/inference" element={<Playground />} />
-                        <Route path="/benchmark" element={<Placeholder name="Benchmark" />} />
+                        <Route path="/benchmark" element={<Benchmark />} />
                         <Route path="/scaling" element={<Placeholder name="Autoscaling" />} />
                     </Routes>
                 </main>

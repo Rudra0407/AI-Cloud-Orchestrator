@@ -7,12 +7,13 @@ export default defineConfig({
         host: '0.0.0.0',
         port: 5173,
         watch: {
-            usePolling: true,   // required for file watching inside Docker on Windows
+            usePolling: true,
         },
         proxy: {
             '/api': {
-                target: 'http://backend:8000',   // use service name, not localhost, inside Docker
+                target: 'http://localhost:8000',
                 changeOrigin: true,
+                ws: true,        // this enables WebSocket proxying too
             },
         },
     },

@@ -1,66 +1,66 @@
-import axios from 'axios'
+import axios from 'axios';
 
-const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:8000'
-const WS_BASE = import.meta.env.VITE_WS_URL || 'ws://localhost:8000'
-
-export const api = axios.create({
-    baseURL: `${API_BASE}/api/v1`,
+// We use the relative path so Vite's proxy (configured in vite.config.js) 
+// automatically intercepts and forwards these requests to your Python backend!
+export const apiClient = axios.create({
+    baseURL: '/api/v1',
     headers: { 'Content-Type': 'application/json' },
-})
+});
 
 // Models
 export const modelsApi = {
-    list: () => api.get('/models/').then(r => r.data),
-    create: (data) => api.post('/models/', data).then(r => r.data),
-    start: (id) => api.post(`/models/${id}/start`).then(r => r.data),
-    stop: (id) => api.post(`/models/${id}/stop`).then(r => r.data),
-    delete: (id) => api.delete(`/models/${id}`),
-    stats: (id) => api.get(`/models/${id}/stats`).then(r => r.data),
-}
+    list: () => apiClient.get('/models/').then(r => r.data),
+    create: (data) => apiClient.post('/models/', data).then(r => r.data),
+    start: (id) => apiClient.post(`/models/${id}/start`).then(r => r.data),
+    stop: (id) => apiClient.post(`/models/${id}/stop`).then(r => r.data),
+    delete: (id) => apiClient.delete(`/models/${id}`),
+    stats: (id) => apiClient.get(`/models/${id}/stats`).then(r => r.data),
+};
 
 // Routes
 export const routesApi = {
-    list: () => api.get('/routes/').then(r => r.data),
-    create: (data) => api.post('/routes/', data).then(r => r.data),
-    delete: (id) => api.delete(`/routes/${id}`),
-    toggle: (id) => api.patch(`/routes/${id}/toggle`).then(r => r.data),
-}
+    list: () => apiClient.get('/routes/').then(r => r.data),
+    create: (data) => apiClient.post('/routes/', data).then(r => r.data),
+    delete: (id) => apiClient.delete(`/routes/${id}`),
+    toggle: (id) => apiClient.patch(`/routes/${id}/toggle`).then(r => r.data),
+};
 
 // Metrics
 export const metricsApi = {
-    system: () => api.get('/metrics/system').then(r => r.data),
-    models: () => api.get('/metrics/models').then(r => r.data),
+    system: () => apiClient.get('/metrics/system').then(r => r.data),
+    models: () => apiClient.get('/metrics/models').then(r => r.data),
     history: (modelId, hours = 24) =>
-        api.get('/metrics/history', { params: { model_id: modelId, hours } }).then(r => r.data),
-}
+        apiClient.get('/metrics/history', { params: { model_id: modelId, hours } }).then(r => r.data),
+};
 
 // Inference
 export const inferenceApi = {
-    chat: (data) => api.post('/inference/chat', data).then(r => r.data),
-}
+    chat: (data) => apiClient.post('/inference/chat', data).then(r => r.data),
+};
 
 // Benchmark
 export const benchmarkApi = {
-    run: (data) => api.post('/benchmark/run', data).then(r => r.data),
-}
+    run: (data) => apiClient.post('/benchmark/run', data).then(r => r.data),
+};
 
 // Scaling
 export const scalingApi = {
-    list: () => api.get('/scaling/').then(r => r.data),
-    create: (data) => api.post('/scaling/', data).then(r => r.data),
-    update: (id, data) => api.patch(`/scaling/${id}`, data).then(r => r.data),
-    delete: (id) => api.delete(`/scaling/${id}`),
-}
+    list: () => apiClient.get('/scaling/').then(r => r.data),
+    create: (data) => apiClient.post('/scaling/', data).then(r => r.data),
+    update: (id, data) => apiClient.patch(`/scaling/${id}`, data).then(r => r.data),
+    delete: (id) => apiClient.delete(`/scaling/${id}`),
+};
 
 // WebSocket for real-time metrics
 export const createMetricsWebSocket = (onMessage) => {
     try {
-        const ws = new WebSocket(`${WS_BASE}/api/v1/metrics/ws`)
-        ws.onmessage = (e) => onMessage(JSON.parse(e.data))
-        ws.onerror = (e) => console.warn('WS unavailable - metrics disabled')
-        return ws
+        const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+        const ws = new WebSocket(`${protocol}//${window.location.host}/api/v1/metrics/ws`);
+        ws.onmessage = (e) => onMessage(JSON.parse(e.data));
+        ws.onerror = (e) => console.warn('WS unavailable - metrics disabled');
+        return ws;
     } catch (e) {
-        console.warn('WS unavailable')
-        return { close: () => { } }
+        console.warn('WS unavailable');
+        return { close: () => { } };
     }
-}
+};
