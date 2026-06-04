@@ -6,6 +6,7 @@ import Playground from './pages/Playground'
 import Metrics from './pages/Metrics'
 import Benchmark from './pages/Benchmark'
 import RoutesPage from './pages/Routes'
+import Autoscaling from './pages/Autoscaling'
 
 const Placeholder = ({ name }) => (
     <div className="p-6">
@@ -27,7 +28,7 @@ export default function App() {
                         <Route path="/metrics" element={<Metrics />} />
                         <Route path="/inference" element={<Playground />} />
                         <Route path="/benchmark" element={<Benchmark />} />
-                        <Route path="/scaling" element={<Placeholder name="Autoscaling" />} />
+                        <Route path="/scaling" element={<Autoscaling />} />
                     </Routes>
                 </main>
             </div>
