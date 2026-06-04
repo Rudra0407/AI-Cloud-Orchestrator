@@ -1,21 +1,44 @@
-# Python / Backend
-.venv/
+# Python
 __pycache__/
-*.pyc
-*.pyo
-*.pyd
+*.py[cod]
+*$py.class
+*.so
 .Python
+.venv/
+venv/
 env/
-pip-log.txt
-pip-delete-this-directory.txt
-.env
+*.egg-info/
+dist/
+build/
 
-# Node / Frontend
+# Environment files (never commit these)
+.env
+*.env.local
+
+# Node
 node_modules/
 dist/
-dist-ssr/
-*.local
+.next/
 
-# System Files
+# IDE
+.vscode/settings.json
+.idea/
+*.swp
+*.swo
+
+# OS
 .DS_Store
 Thumbs.db
+
+# Docker volumes (local data)
+postgres_data/
+redis_data/
+
+# Logs
+*.log
+logs/
+
+# Pytest
+.pytest_cache/
+htmlcov/
+.coverage
