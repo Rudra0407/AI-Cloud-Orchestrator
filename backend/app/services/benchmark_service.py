@@ -32,6 +32,8 @@ async def run_benchmark(request: BenchmarkRequest) -> BenchmarkResult:
                 latencies.append(result["latency_ms"])
                 total_tokens += result["eval_count"] + result["prompt_eval_count"]
             except Exception as e:
+                import traceback
+                traceback.print_exc()  # add this line
                 errors += 1
 
     tasks = [single_request() for _ in range(request.num_requests)]

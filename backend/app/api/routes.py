@@ -1,6 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
+from sqlalchemy.orm import selectinload
 from typing import List
 from app.core.database import get_db
 from app.models.db_models import Route, RouteTarget, Model
@@ -10,9 +11,22 @@ import uuid
 router = APIRouter(prefix="/routes", tags=["Routes"])
 
 
+async def get_route_with_targets(db: AsyncSession, route_id):
+    result = await db.execute(
+        select(Route)
+        .options(selectinload(Route.targets))
+        .where(Route.id == route_id)
+    )
+    return result.scalar_one_or_none()
+
+
 @router.get("/", response_model=List[RouteResponse])
 async def list_routes(db: AsyncSession = Depends(get_db)):
-    result = await db.execute(select(Route).order_by(Route.created_at.desc()))
+    result = await db.execute(
+        select(Route)
+        .options(selectinload(Route.targets))
+        .order_by(Route.created_at.desc())
+    )
     return result.scalars().all()
 
 
@@ -32,23 +46,19 @@ async def create_route(payload: RouteCreate, db: AsyncSession = Depends(get_db))
     await db.flush()
 
     for t in payload.targets:
-        # Verify model exists
         model_res = await db.execute(select(Model).where(Model.id == t.model_id))
         if not model_res.scalar_one_or_none():
             raise HTTPException(status_code=404, detail=f"Model {t.model_id} not found")
-
         target = RouteTarget(route_id=route.id, model_id=t.model_id, weight=t.weight)
         db.add(target)
 
     await db.commit()
-    await db.refresh(route)
-    return route
+    return await get_route_with_targets(db, route.id)
 
 
 @router.get("/{route_id}", response_model=RouteResponse)
 async def get_route(route_id: uuid.UUID, db: AsyncSession = Depends(get_db)):
-    result = await db.execute(select(Route).where(Route.id == route_id))
-    route = result.scalar_one_or_none()
+    route = await get_route_with_targets(db, route_id)
     if not route:
         raise HTTPException(status_code=404, detail="Route not found")
     return route
@@ -66,11 +76,9 @@ async def delete_route(route_id: uuid.UUID, db: AsyncSession = Depends(get_db)):
 
 @router.patch("/{route_id}/toggle", response_model=RouteResponse)
 async def toggle_route(route_id: uuid.UUID, db: AsyncSession = Depends(get_db)):
-    result = await db.execute(select(Route).where(Route.id == route_id))
-    route = result.scalar_one_or_none()
+    route = await get_route_with_targets(db, route_id)
     if not route:
         raise HTTPException(status_code=404, detail="Route not found")
     route.is_active = not route.is_active
     await db.commit()
-    await db.refresh(route)
-    return route
+    return await get_route_with_targets(db, route_id)
