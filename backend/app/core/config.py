@@ -4,7 +4,7 @@ from typing import Optional
 
 class Settings(BaseSettings):
     # App
-    APP_NAME: str = "AI Cloud Orchestrator"
+    APP_NAME: str = "rAIn Orchestrator"
     VERSION: str = "1.0.0"
     ENVIRONMENT: str = "development"
     SECRET_KEY: str = "change-me-in-production"

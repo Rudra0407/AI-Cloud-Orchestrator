@@ -24,7 +24,7 @@ export default function Sidebar() {
                         <span className="text-white text-xs font-bold font-mono">AI</span>
                     </div>
                     <div>
-                        <p className="text-sm font-semibold text-white leading-none">Cloud Orch.</p>
+                        <p className="text-sm font-semibold text-white leading-none">rAIn Orch.</p>
                         <p className="text-[10px] text-brand-400 font-mono mt-0.5">v1.0.0</p>
                     </div>
                 </div>

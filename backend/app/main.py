@@ -46,7 +46,7 @@ async def lifespan(app: FastAPI):
 app = FastAPI(
     title=settings.APP_NAME,
     version=settings.VERSION,
-    description="AI Cloud Orchestrator — Deploy, route, and monitor LLMs",
+    description="rAIn Orchestrator — Deploy, route, and monitor LLMs",
     lifespan=lifespan,
     docs_url="/docs",
     redoc_url="/redoc",
